@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nickname  String
+  name      String   @unique
+  email     String   @unique
+  password  String
+  profile   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+}
+
+model Link {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  content    String?
+  summary    String?
+  tags       Tag[]
+  categories Category[]
+}
+
+model Post {
+  id          Int        @id @default(autoincrement())
+  authorId    Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  post_status Int
+  title       String
+  content     String
+  summary     String?
+  tags        Tag[]
+  categories  Category[]
+  // categories  CategoriesOnPosts[]
+  author      User       @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+  id                Int     @id @default(autoincrement())
+  name              String
+  summary           String?
+  path              String?
+  forlink           Int     @default(0)
+  posts             Post[]
+  // CategoriesOnPosts CategoriesOnPosts[]
+  CategoriesOnLinks Link[]
+}
+
+// model CategoriesOnPosts {
+//   post       Post     @relation(fields: [postId], references: [id])
+//   postId     Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+//   category   Category @relation(fields: [categoryId], references: [id])
+//   categoryId Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+
+//   @@id([postId, categoryId])
+// }
+
+// model CategoriesOnLinks {
+//   link       Link     @relation(fields: [linkId], references: [id])
+//   linkId     Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+//   category   Category @relation(fields: [categoryId], references: [id])
+//   categoryId Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+
+//   @@id([linkId, categoryId])
+// }
+
+model Tag {
+  id      Int     @id @default(autoincrement())
+  name    String
+  summary String?
+  posts   Post[]
+  links   Link[]
+}
+
+// model TagsOnPosts {
+//   post   Post @relation(fields: [postId], references: [id])
+//   postId Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+//   tag    Tag  @relation(fields: [tagId], references: [id])
+//   tagId  Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+
+//   @@id([postId, tagId])
+// }
+
+// model TagsOnLinks {
+//   link   Link @relation(fields: [linkId], references: [id])
+//   linkId Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+//   tag    Tag  @relation(fields: [tagId], references: [id])
+//   tagId  Int // 关系标量字段 (在上述 `@relation` 属性中使用)
+
+//   @@id([linkId, tagId])
+// }
