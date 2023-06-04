@@ -29,6 +29,7 @@ model Link {
   title      String
   content    String?
   summary    String?
+  priority   Int  @default(0)
   tags       Tag[]
   categories Category[]
 }
@@ -54,6 +55,7 @@ model Category {
   summary           String?
   path              String?
   forlink           Int     @default(0)
+  priority   Int  @default(0)
   posts             Post[]
   // CategoriesOnPosts CategoriesOnPosts[]
   CategoriesOnLinks Link[]

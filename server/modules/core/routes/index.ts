@@ -5,7 +5,7 @@ import categoryController from "../controllers/category"
 import tagController from "../controllers/tag"
 import linkController from "../controllers/link"
 
-const router = Router()
+const router:any = Router()
 
 // 用户路由
 router.post("/user/new", userController.create);
